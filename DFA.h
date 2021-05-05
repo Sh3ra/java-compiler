@@ -11,6 +11,10 @@ private:
     bool end = false;
 
 public:
+    void add_edge(char key,DFA_Node* value)
+    {
+        edges[key]=value;
+    }
     void set_edges(map<char, DFA_Node *> &new_edges)
     {
         this->edges = new_edges;
@@ -60,7 +64,7 @@ void add_all_epsillon(DFA_Node *dfa_node)
         q.pop();
         for (char c = 255; c > 128; c--)
         {
-            if ((nfa_node->get_edges().find(c) != nfa_node->get_edges().end()) && 
+            if ((nfa_node->get_edges().find(c) != nfa_node->get_edges().end()) &&
                 find(dfa_node->get_covered_vector().begin(), dfa_node->get_covered_vector().end(), nfa_node->get_edges()[c]) == dfa_node->get_covered_vector().end())
             {
                 dfa_node->add_covered_node(nfa_node->get_edges()[c]);
@@ -72,8 +76,32 @@ void add_all_epsillon(DFA_Node *dfa_node)
     }
 }
 
+vector<char> get_inputs()
+{
+    return vector<char>();
+}
+
+void check_input(char input, DFA_Node *dfa_node,DFA_Node* new_dfa_node)
+{
+    for (int i = 0; i < dfa_node->get_covered_vector().size(); i++)
+    {
+        Node *nfa_node = dfa_node->get_covered_nfa_node(i);
+        if (nfa_node->get_edges().find(input) != nfa_node->get_edges().end())
+        {
+            new_dfa_node->add_covered_node(nfa_node);
+        }
+    }
+}
+
+bool check_covered_vector_exist(DFA_Node* dfa_node)
+{
+
+    return false;
+}
+
 DFA_Node *convert_nfa_to_dfa(Node *root)
 {
+    vector<char> inputs = get_inputs();
     //start with the first node and cover all epsillon
     DFA_Node start;
     DFA_Node *start_ptr = &start;
@@ -86,7 +114,19 @@ DFA_Node *convert_nfa_to_dfa(Node *root)
         DFA_Node *temp = q.front();
         q.pop();
         all_dfa_nodes.push_back(temp);
-        //test all input 
+        //test all input
+        for (int i = 0; i < inputs.size(); i++)
+        {
+            DFA_Node new_dfa_node;
+            DFA_Node* new_dfa_pointer;
+            check_input(inputs[i], temp,new_dfa_pointer);
+            add_all_epsillon(new_dfa_pointer);
+            if(!check_covered_vector_exist(new_dfa_pointer))
+            {
+                temp->add_edge(inputs[i],new_dfa_pointer);
+                q.push(new_dfa_pointer);
+            }
+        }
     }
 
     return start_ptr;
