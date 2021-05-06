@@ -8,12 +8,13 @@ class DFA_Node
 private:
     map<char, DFA_Node *> edges;
     vector<Node *> covered_nfa_nodes;
+    map<Node *, bool> covered_nfa_nodes_map;
     bool end = false;
 
 public:
-    void add_edge(char key,DFA_Node* value)
+    void add_edge(char key, DFA_Node *value)
     {
-        edges[key]=value;
+        edges[key] = value;
     }
     void set_edges(map<char, DFA_Node *> &new_edges)
     {
@@ -27,10 +28,15 @@ public:
     void add_covered_node(Node *node)
     {
         covered_nfa_nodes.push_back(node);
+        covered_nfa_nodes_map[node] = true;
     }
     vector<Node *> get_covered_vector()
     {
         return this->covered_nfa_nodes;
+    }
+    map<Node *, bool> get_covered_map()
+    {
+        return this->covered_nfa_nodes_map;
     }
     Node *get_covered_nfa_node(int i)
     {
@@ -69,6 +75,10 @@ void add_all_epsillon(DFA_Node *dfa_node)
             {
                 dfa_node->add_covered_node(nfa_node->get_edges()[c]);
                 q.push(nfa_node->get_edges()[c]);
+                if (nfa_node->get_edges()[c]->get_end())
+                {
+                    nfa_node->set_end(true);
+                }
             }
             else
                 break;
@@ -81,7 +91,7 @@ vector<char> get_inputs()
     return vector<char>();
 }
 
-void check_input(char input, DFA_Node *dfa_node,DFA_Node* new_dfa_node)
+void check_input(char input, DFA_Node *dfa_node, DFA_Node *new_dfa_node)
 {
     for (int i = 0; i < dfa_node->get_covered_vector().size(); i++)
     {
@@ -92,9 +102,22 @@ void check_input(char input, DFA_Node *dfa_node,DFA_Node* new_dfa_node)
         }
     }
 }
-
-bool check_covered_vector_exist(DFA_Node* dfa_node)
+template <typename Map>
+bool map_compare(Map const &lhs, Map const &rhs)
 {
+    // No predicate needed because there is operator== for pairs already.
+    return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(),
+                                                  rhs.begin());
+}
+bool check_covered_vector_exist(DFA_Node *dfa_node)
+{
+    for (int i = 0; i < all_dfa_nodes.size(); i++)
+    {
+        if (map_compare(dfa_node->get_covered_map(), all_dfa_nodes[i]->get_covered_map()))
+        {
+            return true;
+        }
+    }
 
     return false;
 }
@@ -118,12 +141,12 @@ DFA_Node *convert_nfa_to_dfa(Node *root)
         for (int i = 0; i < inputs.size(); i++)
         {
             DFA_Node new_dfa_node;
-            DFA_Node* new_dfa_pointer;
-            check_input(inputs[i], temp,new_dfa_pointer);
+            DFA_Node *new_dfa_pointer = &new_dfa_node;
+            check_input(inputs[i], temp, new_dfa_pointer);
             add_all_epsillon(new_dfa_pointer);
-            if(!check_covered_vector_exist(new_dfa_pointer))
+            if (!check_covered_vector_exist(new_dfa_pointer))
             {
-                temp->add_edge(inputs[i],new_dfa_pointer);
+                temp->add_edge(inputs[i], new_dfa_pointer);
                 q.push(new_dfa_pointer);
             }
         }
