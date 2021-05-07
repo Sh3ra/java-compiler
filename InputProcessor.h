@@ -9,7 +9,7 @@
 
 class InputProcessor {
 private:
-    string filePath = "D:\\java-compiler\\a.txt";
+    string filePath = "a.txt";
     vector<RegularExpression> regexList;
     RegexListGenerator regexListGenerator;
 
