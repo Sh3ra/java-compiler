@@ -11,6 +11,9 @@
 !InputProcessor.cpp
 !InputProcessor.h
 !TestMain.cpp
+!RegexGenerationStrategy.cpp
+!RegexGenerationStrategy.h
+!a.txt
 #to add your file "!file-name"
 !DFA.h
 !NFA.h
