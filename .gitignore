@@ -1,14 +1,16 @@
 /*
 /*/
- !RegexGenerator.cpp
- !RegexGenerator.h
- !RegexListGenerator.cpp
- !RegexListGenerator.h
- !RegularDefinition.cpp
- !RegularDefinition.h
- !RegularExpression.cpp
- !RegularExpression.h
- !InputProcessor.cpp
- !InputProcessor.h
- !TestMain.cpp
+!RegexGenerator.cpp
+!RegexGenerator.h
+!RegexListGenerator.cpp
+!RegexListGenerator.h
+!RegularDefinition.cpp
+!RegularDefinition.h
+!RegularExpression.cpp
+!RegularExpression.h
+!InputProcessor.cpp
+!InputProcessor.h
+!TestMain.cpp
 #to add your file "!file-name"
+!DFA.h
+!NFA.h
