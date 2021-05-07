@@ -21,6 +21,8 @@ public:
     void addRegex(const RegularExpression &regularExpression);
 
     void setFilePath(const string &path);
+
+    const vector<RegularExpression> &getRegexList() const;
 };
 
 

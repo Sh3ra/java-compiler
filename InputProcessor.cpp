@@ -44,3 +44,7 @@ void InputProcessor::processInput() {
     reverse(reversedRegularDefinitionList.begin(), reversedRegularDefinitionList.end());
     regexListGenerator.setRegularDefinitionList(reversedRegularDefinitionList);
 }
+
+const vector<RegularExpression> &InputProcessor::getRegexList() const {
+    return regexList;
+}

@@ -9,11 +9,9 @@ int main(){
     InputProcessor inputProcessor;
     inputProcessor.processInput();
     inputProcessor.generateRegexList();
-    /*for(RegularDefinition regularDefinition:inputProcessor.regexListGenerator.getRegularDefinitionList()){
-        cout << regularDefinition.getName() << " " << regularDefinition.getDefinition() << endl;
-    }
-    for(RegularExpression regularExpression:inputProcessor.regexList){
+    vector<RegularExpression> regexList = inputProcessor.getRegexList();
+    for(RegularExpression regularExpression:regexList){
         cout << regularExpression.getName() << " " << regularExpression.getExpression() << endl;
-    }*/
+    }
     return 0;
 }
