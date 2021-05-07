@@ -43,8 +43,20 @@ void InputProcessor::processInput() {
     vector<RegularDefinition> reversedRegularDefinitionList = regexListGenerator.getRegularDefinitionList();
     reverse(reversedRegularDefinitionList.begin(), reversedRegularDefinitionList.end());
     regexListGenerator.setRegularDefinitionList(reversedRegularDefinitionList);
+    getPossibleCharacters();
 }
 
 const vector<RegularExpression> &InputProcessor::getRegexList() const {
     return regexList;
+}
+
+vector<char> InputProcessor::getPossibleCharacters() {
+    vector<char> characters;
+    characters.clear();
+    for (int i = 32; i < 127; i++) {
+        characters.push_back((char) i);
+    }
+    for (char character:characters)
+        cout << character << endl;
+    return characters;
 }

@@ -13,16 +13,18 @@ private:
     vector<RegularExpression> regexList;
     RegexListGenerator regexListGenerator;
 
+    void addRegex(const RegularExpression &regularExpression);
+
 public:
     void processInput();
 
     void generateRegexList();
 
-    void addRegex(const RegularExpression &regularExpression);
-
     void setFilePath(const string &path);
 
     const vector<RegularExpression> &getRegexList() const;
+
+    vector<char> getPossibleCharacters();
 };
 
 

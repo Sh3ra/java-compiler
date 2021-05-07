@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <regex>
 #include "InputProcessor.h"
 
 int main(){
@@ -13,5 +14,6 @@ int main(){
     for(RegularExpression regularExpression:regexList){
         cout << regularExpression.getName() << " " << regularExpression.getExpression() << endl;
     }
+    inputProcessor.getPossibleCharacters();
     return 0;
 }
