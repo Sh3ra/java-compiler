@@ -4,7 +4,8 @@
 
 #ifndef JAVA_COMPILER_NFA_H
 #define JAVA_COMPILER_NFA_H
-#define lambda (char)150
+
+char lambda = (char)150;
 #include <iostream>
 #include <bits/stdc++.h>
 #include "InputProcessor.h"
@@ -263,4 +264,24 @@ void generate_NFA_from_regex(Node * start) {
     }
 }
 
+
+void NFA_test() {
+    vector <string> regex;
+    regex.emplace_back(add_parenthesis("a(\\L|B)"));
+    regex.emplace_back(add_parenthesis("A|B"));
+    regex.emplace_back(add_parenthesis("ab*"));
+    regex.emplace_back(add_parenthesis("A-B"));
+    regex.emplace_back(add_parenthesis("AAB"));
+    regex.emplace_back(add_parenthesis("(0|(1(01*(00)*0)*1)*)*"));
+    int * index;
+    int x = 0;
+    index = &x;
+    for(int i = 0;i<regex.size();i++) {
+        x = 0;
+        Node *begin = new Node();
+        Node *end = new Node();
+        thompson_construction(begin, end, regex[i], index);
+        cout<<"hi\n";
+    }
+}
 #endif //JAVA_COMPILER_NFA_H
