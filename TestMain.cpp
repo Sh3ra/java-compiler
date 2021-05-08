@@ -1,19 +1,9 @@
-//
-// Created by marwan_ashraf on 07-May-21.
-//
-
 #include <iostream>
-#include <regex>
-#include "InputProcessor.h"
+using namespace std;
+#include "NFA.h"
 
-int main(){
-    InputProcessor inputProcessor;
-    inputProcessor.processInput();
-    inputProcessor.generateRegexList();
-    vector<RegularExpression> regexList = inputProcessor.getRegexList();
-    for(RegularExpression regularExpression:regexList){
-        cout << regularExpression.getName() << " " << regularExpression.getExpression() << endl;
-    }
-    inputProcessor.getPossibleCharacters();
+int main() {
+    Node * start = new Node();
+    generate_NFA_from_regex(start);
     return 0;
 }
