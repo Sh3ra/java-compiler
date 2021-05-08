@@ -33,8 +33,10 @@ void RegexListGenerator::generateRegexList(vector<RegularExpression> &regexList)
             string keywordDefinition = regularExpression->getExpression();
             string segment;
             stringstream stream(keywordDefinition);
+            cout << regularExpression - regexList.begin() << endl;
             while (getline(stream, segment, '|')) {
                 regexList.emplace_back(segment, segment);
+                cout << regularExpression - regexList.begin() << endl;
             }
             regularExpression = regexList.erase(regularExpression);
         } else {
