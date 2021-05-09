@@ -24,7 +24,7 @@ public:
 
     const vector<RegularExpression> &getRegexList() const;
 
-    vector<char> getPossibleCharacters();
+    static vector<char> getPossibleCharacters();
 };
 
 

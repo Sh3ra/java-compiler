@@ -55,7 +55,5 @@ vector<char> InputProcessor::getPossibleCharacters() {
     for (int i = 32; i < 127; i++) {
         characters.push_back((char) i);
     }
-    /*for (char character:characters)
-        cout << character << endl;*/
     return characters;
 }

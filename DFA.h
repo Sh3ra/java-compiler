@@ -10,6 +10,7 @@ private:
     vector<Node *> covered_nfa_nodes;
     map<Node *, bool> covered_nfa_nodes_map;
     bool end = false;
+    string token="";
 
 public:
     void add_edge(char key, DFA_Node *value)
@@ -51,7 +52,17 @@ public:
     {
         return this->end;
     }
+    void set_token(string t)
+    {
+        this->token=t;
+    }
+    string get_token()
+    {
+        return this->token;
+    }
 };
+
+DFA_Node *get_node_from_map(DFA_Node *pNode);
 
 vector<DFA_Node *> all_dfa_nodes;
 
@@ -68,16 +79,18 @@ void add_all_epsillon(DFA_Node *dfa_node)
     {
         Node *nfa_node = q.front();
         q.pop();
-        for (char c = 255; c > 128; c--)
+        map <char, Node*> mp = nfa_node->get_edges();
+
+        for (int c = 255; c >= 128; c--)
         {
-            if ((nfa_node->get_edges().find(c) != nfa_node->get_edges().end()) &&
-                find(dfa_node->get_covered_vector().begin(), dfa_node->get_covered_vector().end(), nfa_node->get_edges()[c]) == dfa_node->get_covered_vector().end())
+            if ((mp.find(c) != mp.end()) && !(dfa_node->get_covered_map()[nfa_node->get_edges()[c]]))
             {
                 dfa_node->add_covered_node(nfa_node->get_edges()[c]);
                 q.push(nfa_node->get_edges()[c]);
                 if (nfa_node->get_edges()[c]->get_end())
                 {
-                    nfa_node->set_end(true);
+                    dfa_node->set_end(true);
+                    dfa_node->set_token(nfa_node->get_edges()[c]->get_regex_name());
                 }
             }
             else
@@ -88,7 +101,7 @@ void add_all_epsillon(DFA_Node *dfa_node)
 
 vector<char> get_inputs()
 {
-    return vector<char>();
+    return InputProcessor::getPossibleCharacters();
 }
 
 void check_input(char input, DFA_Node *dfa_node, DFA_Node *new_dfa_node)
@@ -96,9 +109,11 @@ void check_input(char input, DFA_Node *dfa_node, DFA_Node *new_dfa_node)
     for (int i = 0; i < dfa_node->get_covered_vector().size(); i++)
     {
         Node *nfa_node = dfa_node->get_covered_nfa_node(i);
-        if (nfa_node->get_edges().find(input) != nfa_node->get_edges().end())
+        map <char, Node*> mp = nfa_node->get_edges();
+
+        if (mp.find(input) != mp.end())
         {
-            new_dfa_node->add_covered_node(nfa_node);
+            new_dfa_node->add_covered_node(nfa_node->get_edges()[input]);
         }
     }
 }
@@ -111,9 +126,10 @@ bool map_compare(Map const &lhs, Map const &rhs)
 }
 bool check_covered_vector_exist(DFA_Node *dfa_node)
 {
+    if(dfa_node->get_covered_vector().size()==0)return true;
     for (int i = 0; i < all_dfa_nodes.size(); i++)
     {
-        if (map_compare(dfa_node->get_covered_map(), all_dfa_nodes[i]->get_covered_map()))
+        if ((dfa_node!=all_dfa_nodes[i])&&map_compare(dfa_node->get_covered_map(), all_dfa_nodes[i]->get_covered_map()))
         {
             return true;
         }
@@ -125,32 +141,46 @@ bool check_covered_vector_exist(DFA_Node *dfa_node)
 DFA_Node *convert_nfa_to_dfa(Node *root)
 {
     vector<char> inputs = get_inputs();
-    //start with the first node and cover all epsillon
-    DFA_Node start;
-    DFA_Node *start_ptr = &start;
+    //start with the first node and cover all epsilon
+    DFA_Node *start_ptr = new DFA_Node();
     start_ptr->add_covered_node(root);
     add_all_epsillon(start_ptr);
+    all_dfa_nodes.push_back(start_ptr);
     queue<DFA_Node *> q;
     q.push(start_ptr);
     while (!q.empty())
     {
         DFA_Node *temp = q.front();
         q.pop();
-        all_dfa_nodes.push_back(temp);
         //test all input
         for (int i = 0; i < inputs.size(); i++)
         {
-            DFA_Node new_dfa_node;
-            DFA_Node *new_dfa_pointer = &new_dfa_node;
+            DFA_Node *new_dfa_pointer = new DFA_Node();
             check_input(inputs[i], temp, new_dfa_pointer);
             add_all_epsillon(new_dfa_pointer);
             if (!check_covered_vector_exist(new_dfa_pointer))
             {
                 temp->add_edge(inputs[i], new_dfa_pointer);
                 q.push(new_dfa_pointer);
+                all_dfa_nodes.push_back(new_dfa_pointer);
+            }
+            else if((new_dfa_pointer->get_covered_vector().size()!=0))
+            {
+                temp->add_edge(inputs[i], get_node_from_map(new_dfa_pointer));
             }
         }
     }
 
     return start_ptr;
+}
+
+DFA_Node *get_node_from_map(DFA_Node *dfa_node) {
+    for (int i = 0; i < all_dfa_nodes.size(); i++)
+    {
+        if (map_compare(dfa_node->get_covered_map(), all_dfa_nodes[i]->get_covered_map()))
+        {
+            return all_dfa_nodes[i];
+        }
+    }
+    return nullptr;
 }

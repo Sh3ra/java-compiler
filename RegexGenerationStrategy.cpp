@@ -2,7 +2,10 @@
 // Created by marwan_ashraf on 06-May-21.
 //
 
-#include <iostream>
+#include "RegularExpression.h"
+#include "RegularDefinition.h"
+#include "RegexGenerationStrategy.h"
+#include <regex>
 
 class ExpressionStrategy : public RegexGenerationStrategy {
 public:
