@@ -9,4 +9,4 @@ assign: =
 { if else while }
 [; , \( \) { }]
 addop: \+ | \-
-mulop: \* |
+mulop: \* | /

@@ -10,7 +10,7 @@ private:
     vector<Node *> covered_nfa_nodes;
     map<Node *, bool> covered_nfa_nodes_map;
     bool end = false;
-    string token="";
+    vector<string> token;
 
 public:
     void add_edge(char key, DFA_Node *value)
@@ -54,11 +54,15 @@ public:
     }
     void set_token(string t)
     {
-        this->token=t;
+        token.push_back(t);
     }
-    string get_token()
+    vector<string> get_token()
     {
         return this->token;
+    }
+    void set_token_vector(vector<string>v)
+    {
+        this->token=v;
     }
 };
 
