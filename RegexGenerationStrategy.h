@@ -10,7 +10,7 @@
 
 class RegexGenerationStrategy {
 public:
-    virtual RegularExpression generateRegex(RegularExpression &regex, vector <RegularDefinition> regDefList) = 0;
+    virtual RegularExpression generateRegex(RegularExpression &regex, vector<RegularDefinition> regDefList) = 0;
 };
 
 

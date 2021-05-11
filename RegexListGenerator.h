@@ -15,9 +15,8 @@ using namespace std;
 class RegexListGenerator {
 private:
     vector<RegularDefinition> regularDefinitionList;
-    string keywordPattern = R"(\{.+\})";
+    string keywordPunctuationPattern = R"((\{.+\})|(\[.+\]))";
     string expressionPattern = R"(([^\\]+)\:(.+))";
-    string punctuationPattern = R"(\[.+\])";
 public:
     void addRegularDefinition(const RegularDefinition &regularDefinition);
 

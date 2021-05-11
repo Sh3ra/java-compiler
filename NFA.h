@@ -5,7 +5,8 @@
 #ifndef JAVA_COMPILER_NFA_H
 #define JAVA_COMPILER_NFA_H
 
-char lambda = (char)150;
+char lambda = (char) 150;
+
 #include <iostream>
 #include <bits/stdc++.h>
 #include "InputProcessor.h"
@@ -15,7 +16,7 @@ using namespace std;
 
 class Node {
 private:
-    map <char, Node*> edges;
+    map<char, Node *> edges;
     bool end = false;
     string regex_name = "";
 
@@ -23,14 +24,16 @@ public:
     void set_regex_name(string re) {
         this->regex_name = re;
     }
+
     string get_regex_name() {
         return this->regex_name;
     }
 
-    void set_edges(map <char, Node*> &new_edges) {
+    void set_edges(map<char, Node *> &new_edges) {
         this->edges = new_edges;
     }
-    map <char, Node*> get_edges() {
+
+    map<char, Node *> get_edges() {
         return this->edges;
     }
 
@@ -43,31 +46,31 @@ public:
     }
 };
 
-const vector  <char> reserved{'+', '-', '*', '|', '(', ')'};
+const vector<char> reserved{'+', '-', '*', '|', '(', ')'};
 
 bool is_reserved(char ch) {
-    for(int i = 0;i<reserved.size();i++){
-        if(ch == reserved[i]) return true;
+    for (int i = 0; i < reserved.size(); i++) {
+        if (ch == reserved[i]) return true;
     }
     return false;
 }
 
-void add_eps_edge(Node * from, Node* to) {
-    char i = (char)255;
-    map<char, Node*> mp = from->get_edges();
-    while(mp.find(i) != mp.end()) i--;
+void add_eps_edge(Node *from, Node *to) {
+    char i = (char) 255;
+    map<char, Node *> mp = from->get_edges();
+    while (mp.find(i) != mp.end()) i--;
     mp[i] = to;
     from->set_edges(mp);
 }
 
-void remove_eps_edge(Node * node, Node* node_to_remove) {
-    map <char, Node*> mp = node->get_edges();
-    for(int i = 255;i>=128;i--){
-        if(mp.find((char)i) != mp.end() && mp[(char)i] == node_to_remove)  {
-            mp.erase((char)i);
-            for(int j = i-1;j>=128;j--) {
-                if(mp.find((char)j) != mp.end()) {
-                    mp[(char)(j+1)] = mp[(char)j];
+void remove_eps_edge(Node *node, Node *node_to_remove) {
+    map<char, Node *> mp = node->get_edges();
+    for (int i = 255; i >= 128; i--) {
+        if (mp.find((char) i) != mp.end() && mp[(char) i] == node_to_remove) {
+            mp.erase((char) i);
+            for (int j = i - 1; j >= 128; j--) {
+                if (mp.find((char) j) != mp.end()) {
+                    mp[(char) (j + 1)] = mp[(char) j];
                 }
             }
             break;
@@ -76,21 +79,21 @@ void remove_eps_edge(Node * node, Node* node_to_remove) {
     node->set_edges(mp);
 }
 
-void add_edge(Node* from, Node* to, char no) {
-    map<char, Node*> mp = from->get_edges();
+void add_edge(Node *from, Node *to, char no) {
+    map<char, Node *> mp = from->get_edges();
     mp[no] = to;
     from->set_edges(mp);
 }
 
-void remove_edge(Node* node, char no) {
-    map<char, Node*> mp = node->get_edges();
+void remove_edge(Node *node, char no) {
+    map<char, Node *> mp = node->get_edges();
     mp[no] = nullptr;
     node->set_edges(mp);
 }
 
 
-void add_connection (Node* from, Node* to, Node* end, char sym) {
-    if(sym == lambda) {
+void add_connection(Node *from, Node *to, Node *end, char sym) {
+    if (sym == lambda) {
         add_eps_edge(from, to);
     } else {
         add_edge(from, to, sym);
@@ -99,8 +102,8 @@ void add_connection (Node* from, Node* to, Node* end, char sym) {
     add_eps_edge(to, end);
 }
 
-void add_closure(Node* from, Node* to,Node* end, char sym) {
-    Node * new_node = new Node();
+void add_closure(Node *from, Node *to, Node *end, char sym) {
+    Node *new_node = new Node();
     add_connection(from, new_node, end, sym);
     remove_eps_edge(new_node, end);
     add_eps_edge(new_node, to);
@@ -109,44 +112,44 @@ void add_closure(Node* from, Node* to,Node* end, char sym) {
     add_eps_edge(new_node, from);
 }
 
-void add_or_char(Node* curr, Node* new_node, char f, char s, Node* end) {
-    Node * temp;
-    for(int i = (int)f; i <=(int)s; i++) {
+void add_or_char(Node *curr, Node *new_node, char f, char s, Node *end) {
+    Node *temp;
+    for (int i = (int) f; i <= (int) s; i++) {
         temp = new Node();
-        add_connection(curr, temp, end, (char)i);
+        add_connection(curr, temp, end, (char) i);
         remove_eps_edge(temp, end);
         add_eps_edge(temp, new_node);
     }
     add_eps_edge(new_node, end);
 }
 
-void thompson_construction(Node* curr, Node* end_node, string re, int *index) {
-    Node * temp_end = new Node();
+void thompson_construction(Node *curr, Node *end_node, string re, int *index) {
+    Node *temp_end = new Node();
     add_eps_edge(temp_end, end_node);
     int or_in_lvl = 0;
     int op = 0;
     int end_index = *index;
-    for(;end_index<re.length();end_index++){
-        if(re[end_index] == '(' && re[end_index-1] != '\\' ) op++;
-        if(re[end_index] == ')' && re[end_index-1] != '\\' ) op--;
-        if(re[end_index] == '|' && re[end_index-1] != '\\' && op == 1) or_in_lvl++;
-        if(op == 0) break;
+    for (; end_index < re.length(); end_index++) {
+        if (re[end_index] == '(' && re[end_index - 1] != '\\') op++;
+        if (re[end_index] == ')' && re[end_index - 1] != '\\') op--;
+        if (re[end_index] == '|' && re[end_index - 1] != '\\' && op == 1) or_in_lvl++;
+        if (op == 0) break;
     }
     (*index)++;
-    vector <Node*> v(or_in_lvl+1);
+    vector<Node *> v(or_in_lvl + 1);
     int node_iter = 0;
     remove_eps_edge(curr, end_node);
-    for(auto & n : v) {
+    for (auto &n : v) {
         n = new Node();
         add_eps_edge(curr, n);
         add_eps_edge(n, temp_end);
     }
 
     stack<char> stk;
-    for(; *index < end_index; (*index)++) {
+    for (; *index < end_index; (*index)++) {
         char ch = re[*index];
-        while(!stk.empty() && ch != '-' && ch != '*' && ch != '+') {
-            Node * new_node = new Node();
+        while (!stk.empty() && ch != '-' && ch != '*' && ch != '+') {
+            Node *new_node = new Node();
             remove_eps_edge(v[node_iter], temp_end);
             add_connection(v[node_iter], new_node, temp_end, stk.top());
             v[node_iter] = new_node;
@@ -159,7 +162,7 @@ void thompson_construction(Node* curr, Node* end_node, string re, int *index) {
                     break;
                 }
                 case '(': {
-                    Node * new_end = new Node();
+                    Node *new_end = new Node();
                     remove_eps_edge(v[node_iter], temp_end);
                     add_eps_edge(v[node_iter], new_end);
                     add_eps_edge(new_end, temp_end);
@@ -171,15 +174,15 @@ void thompson_construction(Node* curr, Node* end_node, string re, int *index) {
                     break;
                 }
                 case '*': {
-                    Node * new_node = new Node();
+                    Node *new_node = new Node();
                     add_closure(v[node_iter], new_node, temp_end, stk.top());
                     v[node_iter] = new_node;
                     stk.pop();
                     break;
                 }
                 case '-': {
-                    Node* new_node = new Node();
-                    char second = re[(*index)+1];
+                    Node *new_node = new Node();
+                    char second = re[(*index) + 1];
                     add_or_char(v[node_iter], new_node, stk.top(), second, temp_end);
                     v[node_iter] = new_node;
                     (*index)++;
@@ -187,7 +190,7 @@ void thompson_construction(Node* curr, Node* end_node, string re, int *index) {
                     break;
                 }
                 case '+': {
-                    Node * new_node = new Node();
+                    Node *new_node = new Node();
                     add_connection(v[node_iter], new_node, temp_end, stk.top());
                     remove_eps_edge(v[node_iter], temp_end);
                     v[node_iter] = new_node;
@@ -206,7 +209,7 @@ void thompson_construction(Node* curr, Node* end_node, string re, int *index) {
         } else {
             if (ch == '\\') {
                 (*index)++;
-                if(re[*index] == 'L') {
+                if (re[*index] == 'L') {
                     stk.push(lambda);
                 } else {
                     stk.push(re[*index]);
@@ -217,18 +220,18 @@ void thompson_construction(Node* curr, Node* end_node, string re, int *index) {
         }
     }
 
-    if(!stk.empty()) {
-        Node * new_node = new Node();
+    if (!stk.empty()) {
+        Node *new_node = new Node();
         remove_eps_edge(v[node_iter], temp_end);
         add_connection(v[node_iter], new_node, temp_end, stk.top());
         v[node_iter] = new_node;
         stk.pop();
     }
 
-    if((*index)+1<re.length() && (re[(*index)+1] == '*' || re[(*index)+1] == '+')) {
+    if ((*index) + 1 < re.length() && (re[(*index) + 1] == '*' || re[(*index) + 1] == '+')) {
         (*index)++;
         char ch = re[*index];
-        if(ch == '*') {
+        if (ch == '*') {
             add_eps_edge(curr, end_node);
             add_eps_edge(temp_end, curr);
         } else if (ch == '+') {
@@ -242,17 +245,17 @@ string add_parenthesis(string re) {
     return "(" + re + ")";
 }
 
-void generate_NFA_from_regex(Node * start) {
+void generate_NFA_from_regex(Node *start) {
     InputProcessor inputProcessor;
     inputProcessor.processInput();
     inputProcessor.generateRegexList();
     vector<RegularExpression> regexList = inputProcessor.getRegexList();
-    vector <Node *> start_nodes(regexList.size());
-    vector <Node *> end_nodes(regexList.size());
-    int * index;
+    vector<Node *> start_nodes(regexList.size());
+    vector<Node *> end_nodes(regexList.size());
+    int *index;
     int x = 0;
     index = &x;
-    for (int i = 0;i<regexList.size();i++) {
+    for (int i = 0; i < regexList.size(); i++) {
         start_nodes[i] = new Node();
         end_nodes[i] = new Node();
         x = 0;
@@ -266,22 +269,23 @@ void generate_NFA_from_regex(Node * start) {
 
 
 void NFA_test() {
-    vector <string> regex;
+    vector<string> regex;
     regex.emplace_back(add_parenthesis("a(\\L|B)"));
     regex.emplace_back(add_parenthesis("A|B"));
     regex.emplace_back(add_parenthesis("ab*"));
     regex.emplace_back(add_parenthesis("A-B"));
     regex.emplace_back(add_parenthesis("AAB"));
     regex.emplace_back(add_parenthesis("(0|(1(01*(00)*0)*1)*)*"));
-    int * index;
+    int *index;
     int x = 0;
     index = &x;
-    for(int i = 0;i<regex.size();i++) {
+    for (int i = 0; i < regex.size(); i++) {
         x = 0;
         Node *begin = new Node();
         Node *end = new Node();
         thompson_construction(begin, end, regex[i], index);
-        cout<<"hi\n";
+        cout << "hi\n";
     }
 }
+
 #endif //JAVA_COMPILER_NFA_H

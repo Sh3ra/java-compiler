@@ -27,26 +27,27 @@ public:
     }
 };
 
-class KeywordStrategy : public RegexGenerationStrategy {
+class KeywordPunctuationStrategy : public RegexGenerationStrategy {
 public:
     RegularExpression
     generateRegex(RegularExpression &regularExpression, const vector<RegularDefinition> regDefList) override {
         regularExpression.setExpression(
-                regex_replace(regularExpression.getExpression(), regex(R"(\s*\{\s*|\s*\}\s*)"), ""));
+                regex_replace(regularExpression.getExpression(), regex(R"(^\s*\{\s*|\s*\}\s*$)"), ""));
+        regularExpression.setExpression(
+                regex_replace(regularExpression.getExpression(), regex(R"(^\s*\[\s*|\s*\]\s*$)"), ""));
         regularExpression.setExpression(regex_replace(regularExpression.getExpression(), regex("\\s+"), "|"));
-        regularExpression.setName("Keyword");
+        regularExpression.setName("KeywordPunctuation");
         return regularExpression;
     }
 };
 
-class PunctuationStrategy : public RegexGenerationStrategy {
+/*class PunctuationStrategy : public RegexGenerationStrategy {
 public:
     RegularExpression
     generateRegex(RegularExpression &regularExpression, const vector<RegularDefinition> regDefList) override {
-        regularExpression.setExpression(
-                regex_replace(regularExpression.getExpression(), regex(R"(\s*\[\s*|\s*\]\s*)"), ""));
+
         regularExpression.setExpression(regex_replace(regularExpression.getExpression(), regex("\\s+"), "|"));
-        regularExpression.setName("Punctuation");
+        regularExpression.setName("Keyword");
         return regularExpression;
     }
-};
+};*/

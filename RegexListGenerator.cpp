@@ -16,29 +16,27 @@ vector<RegularDefinition> RegexListGenerator::getRegularDefinitionList() {
 
 void RegexListGenerator::generateRegexList(vector<RegularExpression> &regexList) {
     for (auto regularExpression = regexList.begin(); regularExpression != regexList.end(); regularExpression++) {
-        if (regex_match(regularExpression->getExpression(), regex(keywordPattern))) {
-            *regularExpression = ((new RegexGenerator(new KeywordStrategy()))->generateRegex(*regularExpression.base(),
-                                                                                             getRegularDefinitionList()));
-        } else if (regex_match(regularExpression->getExpression(), regex(punctuationPattern))) {
-            *regularExpression = (new RegexGenerator(new PunctuationStrategy()))->generateRegex(
-                    *regularExpression.base(), getRegularDefinitionList());
+        if (regex_match(regularExpression->getExpression(), regex(keywordPunctuationPattern))) {
+            *regularExpression = ((new RegexGenerator(new KeywordPunctuationStrategy()))->generateRegex(
+                    *regularExpression.base(),
+                    getRegularDefinitionList()));
         } else if (regex_match(regularExpression->getExpression(), regex(expressionPattern))) {
             *regularExpression = (new RegexGenerator(new ExpressionStrategy()))->generateRegex(
                     *regularExpression.base(),
                     getRegularDefinitionList());
         }
     }
-    for (auto regularExpression = regexList.begin(); regularExpression != regexList.end();) {
-        if (regularExpression->getName() == "Keyword") {
-            string keywordDefinition = regularExpression->getExpression();
+    for (int i = 0; i < regexList.size();) {
+        if (regexList[i].getName() == "KeywordPunctuation") {
+            string keywordDefinition = regexList[i].getExpression();
             string segment;
             stringstream stream(keywordDefinition);
             while (getline(stream, segment, '|')) {
-                regexList.emplace_back(segment, segment);
+                regexList.emplace_back(regex_replace(segment, regex(R"((\\)([^\s]+))"), "$2"), segment);
             }
-            regularExpression = regexList.erase(regularExpression);
+            regexList.erase(regexList.begin() + i);
         } else {
-            regularExpression++;
+            i++;
         }
     }
 }

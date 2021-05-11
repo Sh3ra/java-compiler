@@ -4,7 +4,7 @@
 
 #include "RegexGenerator.h"
 
-RegexGenerator::RegexGenerator(RegexGenerationStrategy *generationStrategy){
+RegexGenerator::RegexGenerator(RegexGenerationStrategy *generationStrategy) {
     this->generationStrategy = generationStrategy;
 }
 

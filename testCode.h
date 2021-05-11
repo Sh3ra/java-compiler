@@ -32,13 +32,10 @@ string checkString(DFA_Node *minimizedGraph, string fillIn) {
         currentNode = currentNode->get_edges()[j];
     }
     if (currentNode->get_end()) {
-        vector<string>tokens=currentNode->get_token();
-        if(find(tokens.begin(),tokens.end(),fillIn)!=tokens.end())
-        {
+        vector<string> tokens = currentNode->get_token();
+        if (find(tokens.begin(), tokens.end(), fillIn) != tokens.end()) {
             return fillIn;
-        }
-        else
-        {
+        } else {
             return tokens.front();
         }
 
