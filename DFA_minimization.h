@@ -75,24 +75,25 @@ DFA_Node *minimize() {
         firstOfCurrentStates = minimizedStates.size();
     }
     vector<DFA_Node *> finalMinimizedStates(minimizedStates.size() - firstOfLastStates - 1);
-    for (int i = 0; i < finalMinimizedStates.size(); ++i) {
-        finalMinimizedStates.at(i) = new DFA_Node();
+    for (auto & finalMinimizedState : finalMinimizedStates) {
+        finalMinimizedState = new DFA_Node();
     }
     for (int i = 0; i < finalMinimizedStates.size(); ++i) {
         for (int j = 0; j < minimizedStates.at(firstOfLastStates + i + 1).size(); ++j) {
+            map<char, DFA_Node *> map1 = minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_edges();
             for (char &input : inputs) {
-                map<char, DFA_Node *> map1 = minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_edges();
-                if (map1.find(input) != map1.end())
+                if (map1.find(input) != map1.end()) {
                     finalMinimizedStates.at(i)->add_edge(input, finalMinimizedStates[
                             states[minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_edges()[input]] -
-                            firstOfLastStates]);
+                            firstOfLastStates - 1]);
+                }
             }
             if (minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_end()) {
                 finalMinimizedStates.at(i)->set_end(true);
                 vector<string> newVector;
-                for (int k = 0; k < minimizedStates.at(firstOfLastStates + i + 1).size(); ++k) {
-                    for (int l = 0; l < minimizedStates.at(firstOfLastStates + i + 1).at(k)->get_token().size(); ++l) {
-                        newVector.push_back(minimizedStates.at(firstOfLastStates + i + 1).at(k)->get_token().at(l));
+                for (auto & k : minimizedStates.at(firstOfLastStates + i + 1)) {
+                    for (int l = 0; l < k->get_token().size(); ++l) {
+                        newVector.push_back(k->get_token().at(l));
                     }
                 }
                 finalMinimizedStates.at(i)->set_token_vector(newVector);
