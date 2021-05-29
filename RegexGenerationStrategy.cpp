@@ -40,14 +40,3 @@ public:
         return regularExpression;
     }
 };
-
-/*class PunctuationStrategy : public RegexGenerationStrategy {
-public:
-    RegularExpression
-    generateRegex(RegularExpression &regularExpression, const vector<RegularDefinition> regDefList) override {
-
-        regularExpression.setExpression(regex_replace(regularExpression.getExpression(), regex("\\s+"), "|"));
-        regularExpression.setName("Keyword");
-        return regularExpression;
-    }
-};*/

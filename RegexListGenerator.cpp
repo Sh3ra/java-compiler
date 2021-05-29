@@ -32,7 +32,8 @@ void RegexListGenerator::generateRegexList(vector<RegularExpression> &regexList)
             string segment;
             stringstream stream(keywordDefinition);
             while (getline(stream, segment, '|')) {
-                regexList.emplace_back(regex_replace(segment, regex(R"((\\)([^\s]+))"), "$2"), segment);
+                regexList.emplace(regexList.begin(), regex_replace(segment, regex(R"((\\)([^\s]+))"), "$2"), segment);
+                i++;
             }
             regexList.erase(regexList.begin() + i);
         } else {
