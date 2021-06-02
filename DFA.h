@@ -51,7 +51,9 @@ public:
     }
 
     void set_token(string t) {
-        if (inputProcessor.getPriority(t) < this->priority) {
+        int newPriority = inputProcessor.getPriority(t);
+        if (newPriority < this->priority) {
+            this->priority = newPriority;
             this->token = t;
         }
     }
