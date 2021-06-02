@@ -245,8 +245,9 @@ string add_parenthesis(string re) {
     return "(" + re + ")";
 }
 
+InputProcessor inputProcessor;
+
 void generate_NFA_from_regex(Node *start) {
-    InputProcessor inputProcessor;
     inputProcessor.processInput();
     inputProcessor.generateRegexList();
     vector<RegularExpression> regexList = inputProcessor.getRegexList();

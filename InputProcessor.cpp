@@ -57,3 +57,12 @@ vector<char> InputProcessor::getPossibleCharacters() {
     }
     return characters;
 }
+
+int InputProcessor::getPriority(const string &tokenName) {
+    int i;
+    for (i = 0; i <= regexList.size(); i++) {
+        if (regexList[i].getName() == tokenName)
+            break;
+    }
+    return i;
+}

@@ -25,6 +25,8 @@ public:
     const vector<RegularExpression> &getRegexList() const;
 
     static vector<char> getPossibleCharacters();
+
+    int getPriority(const string &tokenName);
 };
 
 

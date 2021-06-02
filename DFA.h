@@ -10,8 +10,8 @@ private:
     vector<Node *> covered_nfa_nodes;
     map<Node *, bool> covered_nfa_nodes_map;
     bool end = false;
-    vector<string> token;
-
+    string token;
+    int priority = INT_MAX;
 public:
     void add_edge(char key, DFA_Node *value) {
         edges[key] = value;
@@ -51,16 +51,15 @@ public:
     }
 
     void set_token(string t) {
-        token.push_back(t);
+        if (inputProcessor.getPriority(t) < this->priority) {
+            this->token = t;
+        }
     }
 
-    vector<string> get_token() {
+    string get_token() {
         return this->token;
     }
 
-    void set_token_vector(vector<string> v) {
-        this->token = v;
-    }
 };
 
 DFA_Node *get_node_from_map(DFA_Node *pNode);
