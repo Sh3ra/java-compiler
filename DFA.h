@@ -10,6 +10,7 @@ private:
     vector<Node *> covered_nfa_nodes;
     map<Node *, bool> covered_nfa_nodes_map;
     bool end = false;
+    bool isRoot = false;
     string token;
     int priority = INT_MAX;
 public:
@@ -60,6 +61,16 @@ public:
 
     string get_token() {
         return this->token;
+    }
+
+    void set_isRoot()
+    {
+        this->isRoot=true;
+    }
+
+    bool get_isRoot()
+    {
+        return  this->isRoot;
     }
 
 };
