@@ -18,18 +18,34 @@ DFA_Node *minimize() {
     map<DFA_Node *, int> states;
     vector<char> inputs = get_inputs();
     int numOfStates = 2, firstOfCurrentStates = 2, notAccepted, added, firstOfLastStates = 1;
-    vector<DFA_Node *> final, nonFinal;
+    vector<DFA_Node *> nonFinal;
+    vector<vector<DFA_Node *>> final;
     for (auto &all_dfa_node : all_dfa_nodes) {
         if (!all_dfa_node->get_end()) {
             nonFinal.push_back(all_dfa_node);
             states[all_dfa_node] = 0;
         } else {
-            final.push_back(all_dfa_node);
-            states[all_dfa_node] = 1;
+            int added_ = 0;
+            for (int i = 0; i < final.size(); ++i) {
+                if (all_dfa_node->get_token() == final.at(i).at(0)->get_token()) {
+                    final.at(i).push_back(all_dfa_node);
+                    states[all_dfa_node] = 1 + i;
+                    added_ = 1;
+                    break;
+                }
+            }
+            if (!added_) {
+                vector<DFA_Node *> temp;
+                temp.push_back(all_dfa_node);
+                final.push_back(temp);
+                states[all_dfa_node] = final.size();
+            }
         }
     }
     minimizedStates.push_back(nonFinal);
-    minimizedStates.push_back(final);
+    for (int i = 0; i < final.size(); ++i) {
+        minimizedStates.push_back(final.at(i));
+    }
     for (int m = 0; m < firstOfCurrentStates; ++m) {
         for (int i = 0; i < minimizedStates.at(m).size(); ++i) {
             added = 0;
@@ -75,7 +91,7 @@ DFA_Node *minimize() {
         firstOfCurrentStates = minimizedStates.size();
     }
     vector<DFA_Node *> finalMinimizedStates(minimizedStates.size() - firstOfLastStates - 1);
-    for (auto & finalMinimizedState : finalMinimizedStates) {
+    for (auto &finalMinimizedState : finalMinimizedStates) {
         finalMinimizedState = new DFA_Node();
     }
     for (int i = 0; i < finalMinimizedStates.size(); ++i) {
@@ -90,13 +106,7 @@ DFA_Node *minimize() {
             }
             if (minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_end()) {
                 finalMinimizedStates.at(i)->set_end(true);
-                vector<string> newVector;
-                for (auto & k : minimizedStates.at(firstOfLastStates + i + 1)) {
-                    for (int l = 0; l < k->get_token().size(); ++l) {
-                        newVector.push_back(k->get_token().at(l));
-                    }
-                }
-                finalMinimizedStates.at(i)->set_token_vector(newVector);
+                finalMinimizedStates.at(i)->set_token(minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_token());
             } else {
                 finalMinimizedStates.at(i)->set_end(false);
             }
