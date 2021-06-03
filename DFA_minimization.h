@@ -43,8 +43,8 @@ DFA_Node *minimize() {
         }
     }
     minimizedStates.push_back(nonFinal);
-    for (int i = 0; i < final.size(); ++i) {
-        minimizedStates.push_back(final.at(i));
+    for (auto & i : final) {
+        minimizedStates.push_back(i);
     }
     for (int m = 0; m < firstOfCurrentStates; ++m) {
         for (int i = 0; i < minimizedStates.at(m).size(); ++i) {
@@ -109,8 +109,16 @@ DFA_Node *minimize() {
                 finalMinimizedStates.at(i)->set_token(minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_token());
             } else {
                 finalMinimizedStates.at(i)->set_end(false);
+                if (minimizedStates.at(firstOfLastStates + i + 1).at(j)->get_isRoot()) {
+                    finalMinimizedStates.at(i)->set_isRoot();
+                }
             }
         }
     }
-    return finalMinimizedStates.at(0);
+    for (auto & finalMinimizedState : finalMinimizedStates) {
+        if (finalMinimizedState->get_isRoot()) {
+            return finalMinimizedState;
+        }
+    }
+    return nullptr;
 }
