@@ -144,6 +144,7 @@ DFA_Node *convert_nfa_to_dfa(Node *root) {
     //start with the first node and cover all epsilon
     DFA_Node *start_ptr = new DFA_Node();
     start_ptr->add_covered_node(root);
+    start_ptr->set_isRoot();
     add_all_epsillon(start_ptr);
     all_dfa_nodes.push_back(start_ptr);
     queue<DFA_Node *> q;
