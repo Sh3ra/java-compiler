@@ -47,8 +47,6 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
             currentState = minimizedGraph;
         } else if (input.at(i) != ' ' && input.at(i) != '\n'&& input.at(i) != '\r') {
             file2 << "Error!" << endl;
-            char asdfg = input.at(i);
-            currentState = minimizedGraph;
         }
         if (input.at(i) != file1.eof()) {
             takeCodeInput(&file1);
@@ -64,7 +62,6 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
                     currentState = minimizedGraph;
                 } else if (input.at(i) != ' ' && input.at(i) != '\n' && input.at(i) != '\r') {
                     file2 << "Error!" << endl;
-                    char asdfg = input.at(i);
                 }
             }
         }
