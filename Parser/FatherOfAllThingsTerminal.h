@@ -1,0 +1,14 @@
+//
+// Created by marwan_ashraf on 06-Jun-21.
+//
+
+#ifndef JAVA_COMPILER_FATHEROFALLTHINGSTERMINAL_H
+#define JAVA_COMPILER_FATHEROFALLTHINGSTERMINAL_H
+
+
+class FatherOfAllThingsTerminal {
+
+};
+
+
+#endif //JAVA_COMPILER_FATHEROFALLTHINGSTERMINAL_H
