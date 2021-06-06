@@ -45,8 +45,9 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
             lastAcceptingIndex = -1;
             token = "";
             currentState = minimizedGraph;
-        } else if (input.at(i) != ' ' && input.at(i) != '\n') {
+        } else if (input.at(i) != ' ' && input.at(i) != '\n'&& input.at(i) != '\r') {
             file2 << "Error!" << endl;
+            char asdfg = input.at(i);
             currentState = minimizedGraph;
         }
         if (input.at(i) != file1.eof()) {
@@ -61,8 +62,9 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
                     lastAcceptingIndex = -1;
                     token = "";
                     currentState = minimizedGraph;
-                } else if (input.at(i) != ' ' && input.at(i) != '\n') {
+                } else if (input.at(i) != ' ' && input.at(i) != '\n' && input.at(i) != '\r') {
                     file2 << "Error!" << endl;
+                    char asdfg = input.at(i);
                 }
             }
         }
