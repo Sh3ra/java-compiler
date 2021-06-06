@@ -1,6 +1,6 @@
 /*
 /*/
-!LexicalAnalyzer
-!Parser
+!LexicalAnalyzer/
+!Parser/
 !a.txt
 #to add your file "!file-name"

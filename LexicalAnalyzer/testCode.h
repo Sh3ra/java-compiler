@@ -12,71 +12,56 @@
 #include "bits/stdc++.h"
 #include "DFA_minimization.h"
 
-vector<string> takeInput() {
-    vector<string> inputFile;
+string takeInput() {
     fstream file;
-    string filePath = "test.txt";
+    string filePath = "test.txt", result = "";
     file.open(filePath, ios::in);
     string line;
     while (getline(file, line)) {
-        inputFile.push_back(line);
+        result.append(line);
     }
-    return inputFile;
-}
-
-vector<string> inputs = takeInput();
-
-string checkString(DFA_Node *minimizedGraph, string fillIn) {
-    DFA_Node *currentNode = minimizedGraph;
-    for (char &j : fillIn) {
-        currentNode = currentNode->get_edges()[j];
-    }
-    if (currentNode->get_end()) {
-        return currentNode->get_token();
-
-    } else {
-        return "error";
-    }
+    return result;
 }
 
 void getTokens(DFA_Node *minimizedGraph) {
     fstream file;
-    string filePath = "output.txt";
+    string filePath = "outputPhase1.txt", input = takeInput();
     file.open(filePath, ios::out);
-    string fillIn;
-    for (auto &input : inputs) {
-        if (!fillIn.empty()) {
-            file << checkString(minimizedGraph, fillIn) << endl;
-            fillIn.clear();
+    string token = "";
+    DFA_Node *currentState = minimizedGraph;
+    int lastAcceptingIndex = -1;
+    for (int i = 0; i < input.size(); ++i) {
+        map<char, DFA_Node *> temp = currentState->get_edges();
+        if (temp.find(input.at(i)) != temp.end()) {
+            currentState = currentState->get_edges().at(input.at(i));
+            if (currentState->get_end()) {
+                lastAcceptingIndex = i;
+                token = currentState->get_token();
+            }
+        } else if (lastAcceptingIndex != -1) {
+            file << token << endl;
+            i = lastAcceptingIndex;
+            lastAcceptingIndex = -1;
+            token = "";
+            currentState = minimizedGraph;
+        } else if (input.at(i) != ' ') {
+            file << "Error!" << endl;
+            currentState = minimizedGraph;
         }
-        for (char &j : input) {
-            if (j == ' ' || j == '\n') {
-                if (!fillIn.empty()) {
-                    file << checkString(minimizedGraph, fillIn) << endl;
-                    fillIn.clear();
-                }
-            } else if (fillIn.empty()) {
-                fillIn.push_back(j);
-            } else if ((j >= 'A' && j <= 'z') || (j >= '0' && j <= '9')) {
-                if ((fillIn.at(fillIn.size() - 1) >= 'A' && fillIn.at(fillIn.size() - 1) <= 'z') ||
-                    (fillIn.at(fillIn.size() - 1) >= '0' && fillIn.at(fillIn.size() - 1) <= '9')) {
-                    fillIn.push_back(j);
-                } else {
-                    file << checkString(minimizedGraph, fillIn) << endl;
-                    fillIn.clear();
-                    fillIn.push_back(j);
-                }
-            } else if ((fillIn.at(fillIn.size() - 1) >= 'A' && fillIn.at(fillIn.size() - 1) <= 'z') ||
-                       (fillIn.at(fillIn.size() - 1) >= '0' && fillIn.at(fillIn.size() - 1) <= '9')) {
-                file << checkString(minimizedGraph, fillIn) << endl;
-                fillIn.clear();
-                fillIn.push_back(j);
+        if (i == input.size() - 1) {
+            if (lastAcceptingIndex == i) {
+                file << token << endl;
             } else {
-                fillIn.push_back(j);
+                if (lastAcceptingIndex != -1) {
+                    file << token << endl;
+                    i = lastAcceptingIndex;
+                    lastAcceptingIndex = -1;
+                    token = "";
+                    currentState = minimizedGraph;
+                } else if (input.at(i) != ' ') {
+                    file << "Error!" << endl;
+                }
             }
         }
-    }
-    if (!fillIn.empty()) {
-        file << checkString(minimizedGraph, fillIn) << endl;
     }
 }
