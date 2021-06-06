@@ -2,6 +2,8 @@
 /*/
 !LexicalAnalyzer/
 !Parser/
+!main.cpp
+!mainCodeTokenizer.h
 !a.txt
 !CMakeLists.txt
 #to add your file "!file-name"
