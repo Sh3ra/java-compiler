@@ -4,7 +4,7 @@ using namespace std;
 
 #include "testCode.h"
 
-int main() {
+/*int main() {
     Node *start = new Node();
     generate_NFA_from_regex(start);
     DFA_Node *root = new DFA_Node();
@@ -12,4 +12,4 @@ int main() {
     root = minimize();
     getTokens(root);
     return 0;
-}
+}*/
