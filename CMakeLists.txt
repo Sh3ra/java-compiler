@@ -29,7 +29,7 @@ add_executable(java_compiler
         LexicalAnalyzer/RegularExpression.h
         LexicalAnalyzer/InputProcessor.cpp
         LexicalAnalyzer/InputProcessor.h
-        LexicalAnalyzer/TestMain.cpp
+        main.cpp
         Parser/Facade.cpp
         Parser/predictiveParsingTableForTheGrammar.cpp
         Parser/Facade.h
