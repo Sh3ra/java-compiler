@@ -3,4 +3,5 @@
 !LexicalAnalyzer/
 !Parser/
 !a.txt
+!CMakeLists.txt
 #to add your file "!file-name"
