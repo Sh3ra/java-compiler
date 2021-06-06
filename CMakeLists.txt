@@ -31,6 +31,7 @@ add_executable(java_compiler
         LexicalAnalyzer/InputProcessor.h
         LexicalAnalyzer/TestMain.cpp
         Parser/Facade.cpp
+        Parser/predictiveParsingTableForTheGrammar.cpp
         Parser/Facade.h
         Parser/FatherOfAllThingsTerminal.cpp
         Parser/FatherOfAllThingsTerminal.h
