@@ -11,6 +11,7 @@
 #include "fstream"
 #include "bits/stdc++.h"
 #include "LexicalAnalyzer/lexicalAnalyzer.cpp"
+#include "Parser/topDownParser.cpp"
 
 string input;
 
@@ -22,11 +23,12 @@ void takeCodeInput(fstream *file1) {
 }
 
 void getAndUseToken(DFA_Node *minimizedGraph) {
+    initializeStack();
     fstream file1, file2;
     string filePath1 = "mainCode.txt";
     file1.open(filePath1, ios::in);
-    string filePath = "lexicalAnalyzerOutput.txt";
-    file2.open(filePath, ios::out);
+    string filePath2 = "lexicalAnalyzerOutput.txt";
+    file2.open(filePath2, ios::out);
     string token;
     DFA_Node *currentState = minimizedGraph;
     int lastAcceptingIndex = -1;
@@ -41,6 +43,7 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
             }
         } else if (lastAcceptingIndex != -1) {
             file2 << token << endl;
+            parseInput(token);
             i = lastAcceptingIndex;
             lastAcceptingIndex = -1;
             token = "";
@@ -53,9 +56,11 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
         } else if (i == input.size() - 1) {
             if (lastAcceptingIndex == i) {
                 file2 << token << endl;
+                parseInput(token);
             } else {
                 if (lastAcceptingIndex != -1) {
                     file2 << token << endl;
+                    parseInput(token);
                     i = lastAcceptingIndex;
                     lastAcceptingIndex = -1;
                     token = "";
