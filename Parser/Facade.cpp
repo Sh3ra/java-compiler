@@ -44,7 +44,7 @@ NonTerminal *Facade::findNonTerminal(const string &nonTerminalName) const {
 }
 
 /*int main() {
-    /*Facade facade;
+    Facade facade;
     facade.readInput();
     NonTerminal *nonTerminal = facade.getNonTerminals()[0];
     vector<vector<FatherOfAllThingsTerminal>> productions = nonTerminal->getProductions();

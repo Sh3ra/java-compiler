@@ -4,6 +4,7 @@
 
 #include <utility>
 #include <vector>
+#include <bits/stdc++.h>
 #include "FatherOfAllThingsTerminal.h"
 
 class Terminal : public FatherOfAllThingsTerminal {
@@ -19,7 +20,7 @@ private:
     vector<pair<Terminal, vector<FatherOfAllThingsTerminal>>> first;
     vector<Terminal> follow;
     bool goesToEpsilon;
-
+    map<string,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>predictive_table_row;
 public:
     explicit NonTerminal(string newName) : FatherOfAllThingsTerminal(std::move(newName)) {
         goesToEpsilon = false;
@@ -48,5 +49,26 @@ public:
 
     void addProduction(const vector<FatherOfAllThingsTerminal> &production) {
         productions.push_back(production);
+    }
+
+    const map<string , pair<pair<bool,bool>, vector<FatherOfAllThingsTerminal>>> &getPredictiveTableRow() const {
+        return predictive_table_row;
+    }
+
+    void setPredictiveTableRow(const map<string , pair<pair<bool,bool>, vector<FatherOfAllThingsTerminal>>> &predictiveTableRow) {
+        predictive_table_row = predictiveTableRow;
+    }
+
+    void addToPredictiveTable(pair<bool,bool>sync_and_epsillon,vector<FatherOfAllThingsTerminal>productions, string t)
+    {
+        predictive_table_row[t]={sync_and_epsillon,productions};
+    }
+
+    bool isGoesToEpsilon() const {
+        return goesToEpsilon;
+    }
+
+    void setGoesToEpsilon(bool goesToEpsilon) {
+        NonTerminal::goesToEpsilon = goesToEpsilon;
     }
 };

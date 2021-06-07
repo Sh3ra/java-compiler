@@ -10,26 +10,29 @@
 #include "iostream"
 #include "fstream"
 #include "bits/stdc++.h"
-#include "DFA_minimization.h"
+#include "LexicalAnalyzer/lexicalAnalyzer.cpp"
+#include "Parser/topDownParser.cpp"
 
-string takeInput() {
-    fstream file;
-    string filePath = "test.txt", result = "";
-    file.open(filePath, ios::in);
-    string line;
-    while (getline(file, line)) {
-        result.append(line);
+string input;
+
+void takeCodeInput(fstream *file1) {
+    char ch;
+    if (file1->get(ch)) {
+        input.push_back(ch);
     }
-    return result;
 }
 
-void getTokens(DFA_Node *minimizedGraph) {
-    fstream file;
-    string filePath = "outputPhase1.txt", input = takeInput();
-    file.open(filePath, ios::out);
-    string token = "";
+void getAndUseToken(DFA_Node *minimizedGraph) {
+    initializeStack();
+    fstream file1, file2;
+    string filePath1 = "mainCode.txt";
+    file1.open(filePath1, ios::in);
+    string filePath2 = "lexicalAnalyzerOutput.txt";
+    file2.open(filePath2, ios::out);
+    string token;
     DFA_Node *currentState = minimizedGraph;
     int lastAcceptingIndex = -1;
+    takeCodeInput(&file1);
     for (int i = 0; i < input.size(); ++i) {
         map<char, DFA_Node *> temp = currentState->get_edges();
         if (temp.find(input.at(i)) != temp.end()) {
@@ -39,27 +42,31 @@ void getTokens(DFA_Node *minimizedGraph) {
                 token = currentState->get_token();
             }
         } else if (lastAcceptingIndex != -1) {
-            file << token << endl;
+            file2 << token << endl;
+            parseInput(token);
             i = lastAcceptingIndex;
             lastAcceptingIndex = -1;
             token = "";
             currentState = minimizedGraph;
-        } else if (input.at(i) != ' ') {
-            file << "Error!" << endl;
-            currentState = minimizedGraph;
+        } else if (input.at(i) != ' ' && input.at(i) != '\n'&& input.at(i) != '\r') {
+            file2 << "Error!" << endl;
         }
-        if (i == input.size() - 1) {
+        if (!file1.eof()) {
+            takeCodeInput(&file1);
+        } else if (i == input.size() - 1) {
             if (lastAcceptingIndex == i) {
-                file << token << endl;
+                file2 << token << endl;
+                parseInput(token);
             } else {
                 if (lastAcceptingIndex != -1) {
-                    file << token << endl;
+                    file2 << token << endl;
+                    parseInput(token);
                     i = lastAcceptingIndex;
                     lastAcceptingIndex = -1;
                     token = "";
                     currentState = minimizedGraph;
-                } else if (input.at(i) != ' ') {
-                    file << "Error!" << endl;
+                } else if (input.at(i) != ' ' && input.at(i) != '\n' && input.at(i) != '\r') {
+                    file2 << "Error!" << endl;
                 }
             }
         }
