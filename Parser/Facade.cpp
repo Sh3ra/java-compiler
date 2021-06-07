@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Facade.h"
 #include "InputReader.h"
+#include "FirstFollowFinder.h"
 
 void Facade::addNonTerminal(NonTerminal *nonTerminal) {
     nonTerminals.push_back(nonTerminal);
@@ -22,9 +23,12 @@ const vector<Terminal *> &Facade::getTerminals() const {
     return terminals;
 }
 
-void Facade::readInput() {
+void Facade::readAndProcessInput() {
     InputReader reader(this);
     reader.readInput();
+    FirstFollowFinder finder(this);
+    finder.findFirst();
+    finder.findFollow();
 }
 
 Terminal *Facade::findTerminal(const string &terminalName) const {
@@ -45,7 +49,7 @@ NonTerminal *Facade::findNonTerminal(const string &nonTerminalName) const {
 
 int main() {
     Facade facade;
-    facade.readInput();
+    facade.readAndProcessInput();
     NonTerminal *nonTerminal = facade.getNonTerminals()[0];
     vector<vector<FatherOfAllThingsTerminal>> productions = nonTerminal->getProductions();
     string name = productions[0][0].getName();

@@ -21,7 +21,7 @@ public:
 
     const vector<Terminal *> &getTerminals() const;
 
-    void readInput();
+    void readAndProcessInput();
 
     Terminal *findTerminal(const string &terminalName) const;
 
