@@ -3,9 +3,9 @@
 
 using namespace std;
 
-map<string ,map<string ,pair<pair<bool,bool>,string>>> generatePredictiveParsingTableForTheGrammar()
+map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>> generatePredictiveParsingTableForTheGrammar()
 {
-    map<string ,map<string ,pair<pair<bool,bool>,string>>>table;
+    map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>>table;
     Facade facade;
     vector<NonTerminal*>all_non_terminals=facade.getNonTerminals();
     for(int i=0;i<all_non_terminals.size();i++)
@@ -25,6 +25,7 @@ map<string ,map<string ,pair<pair<bool,bool>,string>>> generatePredictiveParsing
             {
                  all_non_terminals[i]->addToPredictiveTable({true,false},vector<FatherOfAllThingsTerminal>(),Follow[j].getName());
             }
+            table[all_non_terminals[i]->getName()]=all_non_terminals[i]->getPredictiveTableRow();
         }
 
     }

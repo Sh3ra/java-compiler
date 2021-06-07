@@ -36,4 +36,5 @@ add_executable(java_compiler
         Parser/FatherOfAllThingsTerminal.cpp
         Parser/FatherOfAllThingsTerminal.h
         Parser/InputReader.cpp
-        Parser/InputReader.h)
+        Parser/InputReader.h
+        Parser/topDownParser.cpp)
