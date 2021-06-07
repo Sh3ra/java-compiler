@@ -2,11 +2,11 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+Facade facade;
 
 map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>> generatePredictiveParsingTableForTheGrammar()
 {
     map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>>table;
-    Facade facade;
     vector<NonTerminal*>all_non_terminals=facade.getNonTerminals();
     for(auto & all_non_terminal : all_non_terminals)
     {

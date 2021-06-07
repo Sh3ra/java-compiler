@@ -71,4 +71,5 @@ void getAndUseToken(DFA_Node *minimizedGraph) {
             }
         }
     }
+    parseInput("$");
 }

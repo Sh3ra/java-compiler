@@ -14,14 +14,16 @@ fstream file;
 void initializeStack() {
     vector<NonTerminal *> nonTerminals;
     string filePath = "parserOutput.txt";
-    //s.push($);
+    s.push(facade.findTerminal("$"));
     s.push(nonTerminals[0]);
     file.open(filePath, ios::out);
 }
 
 void parseInput(const string &token) {
     map<string, map<string, pair<pair<bool, bool>, vector<FatherOfAllThingsTerminal>>>> parsingTable = generatePredictiveParsingTableForTheGrammar();
-    if (s.top()->isTerminal()) {
+    if (token == "$" && s.top()->getName() == "$") {
+        file << "accepted code" << endl;
+    } else if (s.top()->isTerminal()) {
         if (token == s.top()->getName()) {
             file << "match " + token + " " + s.top()->getName() << endl;
             s.pop();
