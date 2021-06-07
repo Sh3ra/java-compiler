@@ -39,12 +39,12 @@ public:
         return follow;
     }
 
-    void setFirst(const vector<pair<Terminal, vector<FatherOfAllThingsTerminal>>> &setFirst) {
-        first = setFirst;
+    void addFirst(const pair<Terminal, vector<FatherOfAllThingsTerminal>>& newFirst) {
+        first.push_back(newFirst);
     }
 
-    void setFollow(const vector<Terminal> &setFollow) {
-        follow = setFollow;
+    void addFollow(const Terminal &newFollow) {
+        follow.push_back(newFollow);
     }
 
     void addProduction(const vector<FatherOfAllThingsTerminal> &production) {

@@ -21,6 +21,10 @@ public:
 
     const vector<Terminal *> &getTerminals() const;
 
+    void setNonTerminals(const vector<NonTerminal *> &newNonTerminals);
+
+    void setTerminals(const vector<Terminal *> &newTerminals);
+
     void readAndProcessInput();
 
     Terminal *findTerminal(const string &terminalName) const;

@@ -47,6 +47,14 @@ NonTerminal *Facade::findNonTerminal(const string &nonTerminalName) const {
     return nullptr;
 }
 
+void Facade::setNonTerminals(const vector<NonTerminal *> &newNonTerminals) {
+    Facade::nonTerminals = newNonTerminals;
+}
+
+void Facade::setTerminals(const vector<Terminal *> &newTerminals) {
+    Facade::terminals = newTerminals;
+}
+
 int main() {
     Facade facade;
     facade.readAndProcessInput();
