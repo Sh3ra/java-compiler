@@ -8,24 +8,24 @@ map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>
     map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>>table;
     Facade facade;
     vector<NonTerminal*>all_non_terminals=facade.getNonTerminals();
-    for(int i=0;i<all_non_terminals.size();i++)
+    for(auto & all_non_terminal : all_non_terminals)
     {
-        vector<pair<Terminal, vector<FatherOfAllThingsTerminal>>>First=all_non_terminals[i]->getFirst();
-        for(int j=0;j<First.size();j++) {
-            all_non_terminals[i]->addToPredictiveTable({false,false},First[j].second,First[j].first.getName());
+        vector<pair<Terminal, vector<FatherOfAllThingsTerminal>>>First=all_non_terminal->getFirst();
+        for(auto & j : First) {
+            all_non_terminal->addToPredictiveTable({false,false},j.second,j.first.getName());
         }
-        vector<Terminal>Follow=all_non_terminals[i]->getFollow();
-        for(int j=0;j<Follow.size();j++)
+        vector<Terminal>Follow=all_non_terminal->getFollow();
+        for(auto & j : Follow)
         {
-            if(all_non_terminals[i]->goesToEpsilon())
+            if(all_non_terminal->goesToEpsilon())
             {
-                all_non_terminals[i]->addToPredictiveTable({false,true},vector<FatherOfAllThingsTerminal>(),Follow[j].getName());
+                all_non_terminal->addToPredictiveTable({false,true},vector<FatherOfAllThingsTerminal>(),j.getName());
             }
             else
             {
-                 all_non_terminals[i]->addToPredictiveTable({true,false},vector<FatherOfAllThingsTerminal>(),Follow[j].getName());
+                 all_non_terminal->addToPredictiveTable({true,false},vector<FatherOfAllThingsTerminal>(),j.getName());
             }
-            table[all_non_terminals[i]->getName()]=all_non_terminals[i]->getPredictiveTableRow();
+            table[all_non_terminal->getName()]=all_non_terminal->getPredictiveTableRow();
         }
 
     }
