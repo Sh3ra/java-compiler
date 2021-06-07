@@ -30,6 +30,10 @@ add_executable(java_compiler
         LexicalAnalyzer/InputProcessor.cpp
         LexicalAnalyzer/InputProcessor.h
         LexicalAnalyzer/TestMain.cpp
+        LexicalAnalyzer/DFA_minimization.h
+        LexicalAnalyzer/DFA.h
+        LexicalAnalyzer/NFA.h
+        LexicalAnalyzer/testCode.h
         Parser/Facade.cpp
         Parser/Facade.h
         Parser/FatherOfAllThingsTerminal.cpp
