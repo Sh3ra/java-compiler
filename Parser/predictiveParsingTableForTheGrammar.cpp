@@ -17,7 +17,7 @@ map<string ,map<string ,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>
         vector<Terminal>Follow=all_non_terminals[i]->getFollow();
         for(int j=0;j<Follow.size();j++)
         {
-            if(all_non_terminals[i]->isGoesToEpsilon())
+            if(all_non_terminals[i]->goesToEpsilon())
             {
                 all_non_terminals[i]->addToPredictiveTable({false,true},vector<FatherOfAllThingsTerminal>(),Follow[j].getName());
             }

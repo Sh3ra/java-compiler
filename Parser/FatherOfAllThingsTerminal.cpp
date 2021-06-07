@@ -19,11 +19,11 @@ private:
     vector<vector<FatherOfAllThingsTerminal>> productions;
     vector<pair<Terminal, vector<FatherOfAllThingsTerminal>>> first;
     vector<Terminal> follow;
-    bool goesToEpsilon;
+    bool goesToEpsilonFlag;
     map<string,pair<pair<bool,bool>,vector<FatherOfAllThingsTerminal>>>predictive_table_row;
 public:
     explicit NonTerminal(string newName) : FatherOfAllThingsTerminal(std::move(newName)) {
-        goesToEpsilon = false;
+        goesToEpsilonFlag = false;
         isTerminalFlag = false;
     }
 
@@ -64,11 +64,11 @@ public:
         predictive_table_row[t]={sync_and_epsillon,productions};
     }
 
-    bool isGoesToEpsilon() const {
-        return goesToEpsilon;
+    bool goesToEpsilon() const {
+        return goesToEpsilonFlag;
     }
 
-    void setGoesToEpsilon(bool goesToEpsilon) {
-        NonTerminal::goesToEpsilon = goesToEpsilon;
+    void setGoesToEpsilonFlag(bool goesToEpsilon) {
+        NonTerminal::goesToEpsilonFlag = goesToEpsilon;
     }
 };

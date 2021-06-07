@@ -80,6 +80,11 @@ void InputReader::readInput() {
                             facade->addTerminal(newTerminal);
                             nonTerminalProduction.push_back(*newTerminal);
                         }
+                    } else if (regex_match(productionElement, regex("'?\\\\L|Epsilon'?", regex_constants::icase))) {
+                        auto *newTerminal = new Terminal("Epsilon");
+                        facade->addTerminal(newTerminal);
+                        nonTerminalProduction.push_back(*newTerminal);
+                        nonTerminal->setGoesToEpsilonFlag(true);
                     } else {
                         const string &newNonTerminalName = productionElement;
                         flag = false;
@@ -102,6 +107,8 @@ void InputReader::readInput() {
             }
         }
     }
+    auto *newTerminal = new Terminal("$");
+    facade->addTerminal(newTerminal);
 }
 
 void InputReader::setFilePath(const string &path) {

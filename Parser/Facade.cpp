@@ -43,7 +43,7 @@ NonTerminal *Facade::findNonTerminal(const string &nonTerminalName) const {
     return nullptr;
 }
 
-/*int main() {
+int main() {
     Facade facade;
     facade.readInput();
     NonTerminal *nonTerminal = facade.getNonTerminals()[0];
@@ -55,4 +55,4 @@ NonTerminal *Facade::findNonTerminal(const string &nonTerminalName) const {
         NonTerminal *nonTerminal2 = facade.findNonTerminal(name);
         cout << name;
     }
-}*/
+}

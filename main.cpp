@@ -4,8 +4,8 @@
 
 #include "mainCodeTokenizer.h"
 
-int main () {
+/*int main () {
     DFA_Node *minimizedDFA = getMinimizedDFA();
     getAndUseToken(minimizedDFA);
     return 0;
-}
+}*/
