@@ -23,7 +23,7 @@ public:
 
     void setNonTerminals(const vector<NonTerminal *> &newNonTerminals);
 
-    void setTerminals(const vector<Terminal *> &newTerminals);
+    //void setTerminals(const vector<Terminal *> &newTerminals);
 
     void readAndProcessInput();
 

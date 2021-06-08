@@ -18,9 +18,12 @@ class NonTerminal : public FatherOfAllThingsTerminal {
 private:
     vector<vector<FatherOfAllThingsTerminal>> productions;
     vector<pair<Terminal, vector<FatherOfAllThingsTerminal>>> first;
-    vector<Terminal> follow;
     bool goesToEpsilonFlag;
     map<string, pair<pair<bool, bool>, vector<FatherOfAllThingsTerminal>>> predictive_table_row;
+    set<string> followDependenciesNames;
+    vector<NonTerminal> followDependencies;
+    set<string> followNames;
+    vector<Terminal> followTerminals;
 public:
     explicit NonTerminal(string newName) : FatherOfAllThingsTerminal(std::move(newName)) {
         goesToEpsilonFlag = false;
@@ -35,16 +38,31 @@ public:
         return first;
     }
 
-    const vector<Terminal> &getFollow() const {
-        return follow;
+    void addFollowTerminal(const Terminal &followTerminal) {
+        followTerminals.push_back(followTerminal);
     }
 
-    void addFirst(const pair<Terminal, vector<FatherOfAllThingsTerminal>>& newFirst) {
+    vector<Terminal> getFollowTerminals() {
+        for (NonTerminal dependency: followDependencies) {
+            vector<Terminal> followDependencyTerminals = dependency.getFollowTerminals();
+            for (const auto &followDependencyTerminal:followDependencyTerminals) {
+                followTerminals.push_back(followDependencyTerminal);
+            }
+        }
+        followDependencies.clear();
+        return followTerminals;
+    }
+
+    void addFirst(const pair<Terminal, vector<FatherOfAllThingsTerminal>> &newFirst) {
         first.push_back(newFirst);
     }
 
-    void addFollow(const Terminal &newFollow) {
-        follow.push_back(newFollow);
+    void addFollowName(const string &newFollowName) {
+        followNames.insert(newFollowName);
+    }
+
+    const set<string> &getFollowNames() const {
+        return followNames;
     }
 
     void addProduction(const vector<FatherOfAllThingsTerminal> &production) {
@@ -55,10 +73,10 @@ public:
         return predictive_table_row;
     }
 
-    void setPredictiveTableRow(
+    /*void setPredictiveTableRow(
             const map<string, pair<pair<bool, bool>, vector<FatherOfAllThingsTerminal>>> &predictiveTableRow) {
         predictive_table_row = predictiveTableRow;
-    }
+    }*/
 
     void
     addToPredictiveTable(pair<bool, bool> sync_and_epsilon, const vector<FatherOfAllThingsTerminal> &addedProductions,
@@ -72,5 +90,21 @@ public:
 
     void setGoesToEpsilonFlag(bool goesToEpsilon) {
         NonTerminal::goesToEpsilonFlag = goesToEpsilon;
+    }
+
+    const set<string> &getFollowDependenciesNames() const {
+        return followDependenciesNames;
+    }
+
+    void addFollowDependencyName(const string &followDependency) {
+        NonTerminal::followDependenciesNames.insert(followDependency);
+    }
+
+    /*const vector<NonTerminal> &getFollowDependencies() const {
+        return followDependencies;
+    }*/
+
+    void addFollowDependency(const NonTerminal &followDependency) {
+        followDependencies.push_back(followDependency);
     }
 };

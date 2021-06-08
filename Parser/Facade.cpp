@@ -51,20 +51,13 @@ void Facade::setNonTerminals(const vector<NonTerminal *> &newNonTerminals) {
     Facade::nonTerminals = newNonTerminals;
 }
 
-void Facade::setTerminals(const vector<Terminal *> &newTerminals) {
+/*void Facade::setTerminals(const vector<Terminal *> &newTerminals) {
     Facade::terminals = newTerminals;
-}
+}*/
 
 int main() {
     Facade facade;
     facade.readAndProcessInput();
-    NonTerminal *nonTerminal = facade.getNonTerminals()[0];
-    vector<vector<FatherOfAllThingsTerminal>> productions = nonTerminal->getProductions();
-    string name = productions[0][0].getName();
-    if (productions[0][0].isTerminal()) {
-        Terminal *terminal = facade.findTerminal(name);
-    } else {
-        NonTerminal *nonTerminal2 = facade.findNonTerminal(name);
-        cout << name;
-    }
+    facade.findNonTerminal("FACTOR")->getFollowTerminals();
+    return 0;
 }
