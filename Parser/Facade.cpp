@@ -58,6 +58,9 @@ void Facade::setNonTerminals(const vector<NonTerminal *> &newNonTerminals) {
 int main() {
     Facade facade;
     facade.readAndProcessInput();
-    facade.findNonTerminal("FACTOR")->getFollowTerminals();
+    for (auto nonTerminal:facade.getNonTerminals()){
+        nonTerminal->getFirst();
+        nonTerminal->getFollowTerminals();
+    }
     return 0;
 }

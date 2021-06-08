@@ -6,4 +6,5 @@
 !mainCodeTokenizer.h
 !a.txt
 !CMakeLists.txt
+!Parser/grammar.txt
 #to add your file "!file-name"
