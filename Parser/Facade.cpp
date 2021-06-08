@@ -55,12 +55,3 @@ void Facade::setNonTerminals(const vector<NonTerminal *> &newNonTerminals) {
     Facade::terminals = newTerminals;
 }*/
 
-int main() {
-    Facade facade;
-    facade.readAndProcessInput();
-    for (auto nonTerminal:facade.getNonTerminals()){
-        nonTerminal->getFirst();
-        nonTerminal->getFollowTerminals();
-    }
-    return 0;
-}
