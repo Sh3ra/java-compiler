@@ -10,9 +10,11 @@ using namespace std;
 
 stack<FatherOfAllThingsTerminal *> s;
 fstream file;
+map<string, map<string, pair<pair<bool, bool>, vector<FatherOfAllThingsTerminal>>>> parsingTable;
 
 void initializeStack() {
-    vector<NonTerminal *> nonTerminals;
+    parsingTable = generatePredictiveParsingTableForTheGrammar();
+    vector<NonTerminal *> nonTerminals = facade.getNonTerminals();
     string filePath = "parserOutput.txt";
     s.push(facade.findTerminal("$"));
     s.push(nonTerminals[0]);
@@ -20,7 +22,6 @@ void initializeStack() {
 }
 
 void parseInput(const string &token) {
-    map<string, map<string, pair<pair<bool, bool>, vector<FatherOfAllThingsTerminal>>>> parsingTable = generatePredictiveParsingTableForTheGrammar();
     if (token == "$" && s.top()->getName() == "$") {
         file << "accepted code" << endl;
     } else if (s.top()->isTerminal()) {
@@ -43,15 +44,22 @@ void parseInput(const string &token) {
         } else if (temp[token].first.second) {
             file << s.top()->getName() + " --> epsilon" << endl;
             s.pop();
+            parseInput(token);
         } else {
-            s.pop();
             vector<FatherOfAllThingsTerminal> v = temp[token].second;
             file << s.top()->getName() + " --> ";
+            s.pop();
+            reverse(v.begin(), v.end());
             for (auto &i : v) {
-                s.push(&i);
+                if(i.isTerminal()){
+                    s.push(facade.findTerminal(i.getName()));
+                } else {
+                    s.push(facade.findNonTerminal(i.getName()));
+                }
                 file << i.getName() + " ";
             }
             file << endl;
+            parseInput(token);
         }
     }
 }
