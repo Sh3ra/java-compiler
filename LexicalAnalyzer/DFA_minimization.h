@@ -38,12 +38,12 @@ DFA_Node *minimize() {
                 vector<DFA_Node *> temp;
                 temp.push_back(all_dfa_node);
                 final.push_back(temp);
-                states[all_dfa_node] = final.size();
+                states[all_dfa_node] = (int) final.size();
             }
         }
     }
     minimizedStates.push_back(nonFinal);
-    for (auto & i : final) {
+    for (auto &i : final) {
         minimizedStates.push_back(i);
     }
     for (int m = 0; m < firstOfCurrentStates; ++m) {
@@ -77,7 +77,7 @@ DFA_Node *minimize() {
                 if (!added) {
                     minimizedStates.emplace_back();
                     minimizedStates.at(minimizedStates.size() - 1).push_back(minimizedStates.at(m).at(i));
-                    states[minimizedStates.at(m).at(i)] = minimizedStates.size() - 1;
+                    states[minimizedStates.at(m).at(i)] = (int) minimizedStates.size() - 1;
                 }
             }
         }
@@ -85,10 +85,10 @@ DFA_Node *minimize() {
             if (minimizedStates.size() - firstOfLastStates - 1 == numOfStates) {
                 break;
             }
-            numOfStates = minimizedStates.size() - firstOfLastStates - 1;
-            firstOfLastStates = minimizedStates.size() - 1;
+            numOfStates = (int) minimizedStates.size() - firstOfLastStates - 1;
+            firstOfLastStates = (int) minimizedStates.size() - 1;
         }
-        firstOfCurrentStates = minimizedStates.size();
+        firstOfCurrentStates = (int) minimizedStates.size();
     }
     vector<DFA_Node *> finalMinimizedStates(minimizedStates.size() - firstOfLastStates - 1);
     for (auto &finalMinimizedState : finalMinimizedStates) {
@@ -115,7 +115,28 @@ DFA_Node *minimize() {
             }
         }
     }
-    for (auto & finalMinimizedState : finalMinimizedStates) {
+    fstream tableFile;
+    string filePath = "resultantTransitionTableForTheMinimalDFAOutput.txt";
+    tableFile.open(filePath, ios::out);
+    map<DFA_Node *, int> counter;
+    int count = 1;
+    for (auto &finalMinimizedState : finalMinimizedStates) {
+        if (counter[finalMinimizedState] == 0) {
+            counter[finalMinimizedState] = count;
+            count++;
+        }
+        tableFile << counter[finalMinimizedState] << " :\t";
+        for (auto edge:finalMinimizedState->get_edges()) {
+            tableFile << edge.first;
+            if (counter[edge.second] == 0) {
+                counter[edge.second] = count;
+                count++;
+            }
+            tableFile << "[ " << counter[edge.second] << " ]" << " ";
+        }
+        tableFile << "\n";
+    }
+    for (auto &finalMinimizedState : finalMinimizedStates) {
         if (finalMinimizedState->get_isRoot()) {
             return finalMinimizedState;
         }

@@ -8,6 +8,7 @@
 char lambda = (char) 150;
 
 #include <iostream>
+#include <utility>
 #include <bits/stdc++.h>
 #include "InputProcessor.h"
 
@@ -18,11 +19,11 @@ class Node {
 private:
     map<char, Node *> edges;
     bool end = false;
-    string regex_name = "";
+    string regex_name;
 
 public:
     void set_regex_name(string re) {
-        this->regex_name = re;
+        this->regex_name = std::move(re);
     }
 
     string get_regex_name() {
@@ -41,7 +42,7 @@ public:
         this->end = new_end;
     }
 
-    bool get_end() {
+    bool get_end() const {
         return this->end;
     }
 };
@@ -49,8 +50,8 @@ public:
 const vector<char> reserved{'+', '-', '*', '|', '(', ')'};
 
 bool is_reserved(char ch) {
-    for (int i = 0; i < reserved.size(); i++) {
-        if (ch == reserved[i]) return true;
+    for (char i : reserved) {
+        if (ch == i) return true;
     }
     return false;
 }
@@ -85,7 +86,7 @@ void add_edge(Node *from, Node *to, char no) {
     from->set_edges(mp);
 }
 
-void remove_edge(Node *node, char no) {
+__attribute__((unused)) void remove_edge(Node *node, char no) {
     map<char, Node *> mp = node->get_edges();
     mp[no] = nullptr;
     node->set_edges(mp);
@@ -114,7 +115,7 @@ void add_closure(Node *from, Node *to, Node *end, char sym) {
 
 void add_or_char(Node *curr, Node *new_node, char f, char s, Node *end) {
     Node *temp;
-    for (int i = (int) f; i <= (int) s; i++) {
+    for (int i = (int) (unsigned char) f; i <= (int) s; i++) {
         temp = new Node();
         add_connection(curr, temp, end, (char) i);
         remove_eps_edge(temp, end);
@@ -241,7 +242,7 @@ void thompson_construction(Node *curr, Node *end_node, string re, int *index) {
 }
 
 
-string add_parenthesis(string re) {
+string add_parenthesis(const string &re) {
     return "(" + re + ")";
 }
 
@@ -269,7 +270,7 @@ void generate_NFA_from_regex(Node *start) {
 }
 
 
-void NFA_test() {
+__attribute__((unused)) void NFA_test() {
     vector<string> regex;
     regex.emplace_back(add_parenthesis("a(\\L|B)"));
     regex.emplace_back(add_parenthesis("A|B"));
@@ -280,11 +281,11 @@ void NFA_test() {
     int *index;
     int x = 0;
     index = &x;
-    for (int i = 0; i < regex.size(); i++) {
+    for (auto &i : regex) {
         x = 0;
         Node *begin = new Node();
         Node *end = new Node();
-        thompson_construction(begin, end, regex[i], index);
+        thompson_construction(begin, end, i, index);
         cout << "hi\n";
     }
 }

@@ -9,7 +9,7 @@
 
 class InputProcessor {
 private:
-    string filePath = "laws.txt";
+    string filePath = "rules.txt";
     vector<RegularExpression> regexList;
     RegexListGenerator regexListGenerator;
 
